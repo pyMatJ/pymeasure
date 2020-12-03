@@ -1036,3 +1036,28 @@ class DirectoryLineEdit(QtGui.QLineEdit):
         path = QtGui.QFileDialog.getExistingDirectory(self, 'Directory', '/')
         if path is not '':
             self.setText(path)
+
+
+class FilenameEdit(QtGui.QLineEdit):
+    """
+    Widget that allows defining a filename.
+    Will later allow for placeholders to automatically generate filenames
+    with experiment parameters
+    """
+    def __init__(self, parent=None):
+        super(FilenameEdit, self).__init__(parent=parent)
+
+    def text(self):
+        text = super(FilenameEdit, self).text()
+        ### commented code below will hold placeholder management
+        # patterns = re.findall(r'\<.*?\>', text)
+        # print(patterns)
+
+        # for pattern in patterns:
+
+        #     if pattern[1:-1] == 'date':
+        #         now = datetime.now().strftime('%H%M%S')
+        #         text = text.replace(pattern, now)
+
+        print(text)
+        return text

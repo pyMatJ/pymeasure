@@ -40,6 +40,7 @@ from .widgets import (
     SequencerWidget,
     ImageWidget,
     DirectoryLineEdit,
+    FilenameEdit
 )
 from ..experiment.results import Results
 
@@ -183,6 +184,9 @@ class ManagedWindow(QtGui.QMainWindow):
             self.directory_label = QtGui.QLabel(self)
             self.directory_label.setText('Directory')
             self.directory_line = DirectoryLineEdit(parent=self)
+            self.filename_label = QtGui.QLabel(self)
+            self.filename_label.setText('Filename')
+            self.filename_line = FilenameEdit(parent=self)
 
         self.queue_button = QtGui.QPushButton('Queue', self)
         self.queue_button.clicked.connect(self.queue)
@@ -247,6 +251,8 @@ class ManagedWindow(QtGui.QMainWindow):
             vbox = QtGui.QVBoxLayout()
             vbox.addWidget(self.directory_label)
             vbox.addWidget(self.directory_line)
+            vbox.addWidget(self.filename_label)
+            vbox.addWidget(self.filename_line)
             vbox.addLayout(hbox)
 
         if self.inputs_in_scrollarea:
