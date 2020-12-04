@@ -266,7 +266,8 @@ class Channel(object):
                                    :attr:`~.Keithley2400.compliance_current`
         :param voltage_range: A :attr:`~.Keithley2400.voltage_range` value or None
         """
-        log.info("%s is sourcing voltage." % self.name)
+        print('aa')
+        log.info("%s is sourcing voltage." % self.channel)
         self.source_mode = 'voltage'
         if voltage_range is None:
             self.auto_range_source()
