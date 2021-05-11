@@ -1033,7 +1033,9 @@ class DirectoryLineEdit(QtGui.QLineEdit):
         self.addAction(browse_action, QtGui.QLineEdit.TrailingPosition)
 
     def browse_triggered(self):
-        path = QtGui.QFileDialog.getExistingDirectory(self, 'Directory', '/')
+        currdir = self.text() ### get the current directory as starting point for browser
+        path = QtGui.QFileDialog.getExistingDirectory(self, 'Directory', 
+                                                      currdir)
         if path is not '':
             self.setText(path)
 

@@ -30,6 +30,13 @@ class TDS2000(Instrument):
     and provides a high-level for interacting with the instrument
     """
 
+    time_per_div = Instrument.control(
+        "HOR:MAI:SCA?", "HOR:MAI:SCA %g",
+         """ A floating point property that sets the time per division 
+         in sec/div. Valid values are multiple of 1-2.5-5 times an exponent 
+         (in seconds). Other values are forced to the closest acceptable 
+         value.""")
+
     class Measurement(object):
 
         SOURCE_VALUES = ['CH1', 'CH2', 'MATH']
