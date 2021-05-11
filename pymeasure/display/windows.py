@@ -1,7 +1,7 @@
 #
 # This file is part of the PyMeasure package.
 #
-# Copyright (c) 2013-2020 PyMeasure Developers
+# Copyright (c) 2013-2021 PyMeasure Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,9 @@
 import logging
 
 import os
+import subprocess, platform
+
+
 import pyqtgraph as pg
 
 from .browser import BrowserItem
@@ -150,7 +153,6 @@ class ManagedWindow(QtGui.QMainWindow):
 
 
     """
-    EDITOR = 'gedit'
 
     def __init__(self, procedure_class, inputs=(), displays=(), x_axis=None, y_axis=None,
                  log_channel='', log_level=logging.INFO, parent=None, sequencer=False,
@@ -305,6 +307,9 @@ class ManagedWindow(QtGui.QMainWindow):
         self.resize(1000, 800)
 
     def quit(self, evt=None):
+        if self.manager.is_running():
+            self.abort()
+
         self.close()
 
     def browser_item_changed(self, item, column):
@@ -410,9 +415,20 @@ class ManagedWindow(QtGui.QMainWindow):
             experiment.curve.setPen(pg.mkPen(color=color, width=2))
 
     def open_file_externally(self, filename):
-        # TODO: Make this function OS-agnostic
-        import subprocess
-        proc = subprocess.Popen([self.EDITOR, filename])
+        """ Method to open the datafile using an external editor or viewer. Uses the default
+        application to open a datafile of this filetype, but can be overridden by the child
+        class in order to open the file in another application of choice.
+        """
+        system = platform.system()
+        if (system == 'Windows'):
+            # The empty argument after the start is needed to be able to cope correctly with filenames with spaces
+            proc = subprocess.Popen(['start', '', filename], shell=True)
+        elif (system == 'Linux'):
+            proc = subprocess.Popen(['xdg-open', filename])
+        elif (system == 'Darwin'):
+            proc = subprocess.Popen(['open', filename])
+        else:
+            raise Exception("{cls} method open_file_externally does not support {system} OS".format(cls=type(self).__name__,system=system))
 
     def make_procedure(self):
         if not isinstance(self.inputs, InputsWidget):
@@ -564,8 +580,6 @@ class ManagedImageWindow(QtGui.QMainWindow):
 
     """
 
-    EDITOR = 'gedit'
-
     def __init__(self, procedure_class, x_axis, y_axis, z_axis=None, inputs=(), displays=(),
                  log_channel='', log_level=logging.INFO, parent=None):
         super().__init__(parent)
@@ -674,6 +688,9 @@ class ManagedImageWindow(QtGui.QMainWindow):
         self.resize(1000, 800)
 
     def quit(self, evt=None):
+        if self.manager.is_running():
+            self.abort()
+
         self.close()
 
     def browser_item_changed(self, item, column):
@@ -785,9 +802,20 @@ class ManagedImageWindow(QtGui.QMainWindow):
             experiment.curve.setPen(pg.mkPen(color=color, width=2))
 
     def open_file_externally(self, filename):
-        # TODO: Make this function OS-agnostic
-        import subprocess
-        proc = subprocess.Popen([self.EDITOR, filename])
+        """ Method to open the datafile using an external editor or viewer. Uses the default
+        application to open a datafile of this filetype, but can be overridden by the child
+        class in order to open the file in another application of choice.
+        """
+        system = platform.system()
+        if (system == 'Windows'):
+            # The empty argument after the start is needed to be able to cope correctly with filenames with spaces
+            proc = subprocess.Popen(['start', '', filename], shell=True)
+        elif (system == 'Linux'):
+            proc = subprocess.Popen(['xdg-open', filename])
+        elif (system == 'Darwin'):
+            proc = subprocess.Popen(['open', filename])
+        else:
+            raise Exception("{cls} method open_file_externally does not support {system} OS".format(cls=type(self).__name__,system=system))
 
     def make_procedure(self):
         if not isinstance(self.inputs, InputsWidget):
